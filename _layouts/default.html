@@ -1053,6 +1053,117 @@
       }
     }
 
+    /* === GLOBE MODAL === */
+    .hero-location[role="button"] {
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .hero-location[role="button"] .pin {
+      animation: pinGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes pinGlow {
+      0%, 100% { text-shadow: 0 0 4px transparent; }
+      50% { text-shadow: 0 0 10px var(--accent), 0 0 20px rgba(201, 168, 76, 0.3); }
+    }
+
+    .hero-location[role="button"]:hover {
+      color: var(--accent);
+    }
+
+    .globe-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(7, 7, 11, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .globe-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .globe-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.4rem 0.75rem;
+      cursor: pointer;
+      transition: border-color 0.3s ease, color 0.3s ease;
+    }
+
+    .globe-close:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .globe-canvas-wrap {
+      position: relative;
+      width: min(560px, 85vw, 55vh);
+      height: min(560px, 85vw, 55vh);
+    }
+
+    .globe-canvas-wrap canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+
+    .globe-cities {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 2rem;
+    }
+
+    .globe-city {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .globe-city.current {
+      color: var(--accent);
+    }
+
+    .globe-city .globe-dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-right: 0.35rem;
+      vertical-align: middle;
+      box-shadow: 0 0 6px var(--accent-15);
+    }
+
+    @media (max-width: 480px) {
+      .globe-cities {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+      }
+    }
+
     /* === PRINT === */
     @media print {
       :root {
@@ -1073,7 +1184,7 @@
         background-image: none;
       }
 
-      .scroll-progress, .glow, .nav, .scroll-hint, .footer-top { display: none !important; }
+      .scroll-progress, .glow, .nav, .scroll-hint, .footer-top, .globe-modal { display: none !important; }
 
       .hero {
         min-height: auto;
@@ -1153,6 +1264,17 @@
     </button>
   </footer>
 
+  <!-- Globe modal -->
+  <div class="globe-modal" id="globe-modal" aria-hidden="true">
+    <button class="globe-close" aria-label="Close globe">ESC</button>
+    <div class="globe-canvas-wrap">
+      <canvas id="globe-canvas"></canvas>
+    </div>
+    <div class="globe-cities">
+      <span class="globe-city current"><span class="globe-dot"></span>Seoul, South Korea &mdash; now</span>
+    </div>
+  </div>
+
   <!-- ==================== SCRIPTS ==================== -->
   <script>
     (function() {
@@ -1228,6 +1350,86 @@
           document.body.style.overflow = '';
         });
       });
+
+      // Globe modal
+      var globeModal = document.getElementById('globe-modal');
+      var heroLocation = document.querySelector('.hero-location[role="button"]');
+      var globeInstance = null;
+
+      function openGlobe() {
+        if (!globeModal) return;
+        globeModal.classList.add('active');
+        globeModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        var canvas = document.getElementById('globe-canvas');
+        if (!canvas || globeInstance) return;
+
+        requestAnimationFrame(function() {
+        var wrap = canvas.parentElement;
+        var size = wrap.clientWidth;
+
+        import('https://cdn.jsdelivr.net/npm/cobe@0.6.3/+esm').then(function(mod) {
+          var createGlobe = mod.default;
+          var phi = 2.2;
+          globeInstance = createGlobe(canvas, {
+            devicePixelRatio: Math.min(window.devicePixelRatio, 2),
+            width: size,
+            height: size,
+            phi: phi,
+            theta: 0.25,
+            scale: 0.8,
+            dark: 1,
+            diffuse: 1.2,
+            mapSamples: 16000,
+            mapBrightness: 6,
+            baseColor: [0.3, 0.3, 0.35],
+            markerColor: [0.788, 0.659, 0.298],
+            glowColor: [0.4, 0.33, 0.15],
+            markers: [
+              { location: [48.8566, 2.3522], size: 0.04 },
+              { location: [-34.6037, -58.3816], size: 0.04 },
+              { location: [31.2304, 121.4737], size: 0.04 },
+              { location: [37.5665, 126.9780], size: 0.1 },
+              { location: [47.6062, -122.3321], size: 0.04 },
+              { location: [40.7128, -74.0060], size: 0.04 }
+            ],
+            onRender: function(state) {
+              state.phi = phi;
+              phi += 0.003;
+            }
+          });
+        });
+        });
+      }
+
+      function closeGlobe() {
+        if (!globeModal) return;
+        globeModal.classList.remove('active');
+        globeModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (globeInstance) {
+          globeInstance.destroy();
+          globeInstance = null;
+        }
+      }
+
+      if (heroLocation) {
+        heroLocation.addEventListener('click', openGlobe);
+        heroLocation.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openGlobe(); }
+        });
+      }
+
+      if (globeModal) {
+        document.querySelector('.globe-close').addEventListener('click', closeGlobe);
+        globeModal.addEventListener('click', function(e) {
+          if (e.target === globeModal) closeGlobe();
+        });
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && globeModal.classList.contains('active')) closeGlobe();
+        });
+      }
     })();
   </script>
 
