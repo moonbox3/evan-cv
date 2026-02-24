@@ -1115,14 +1115,17 @@
 
     .globe-canvas-wrap {
       position: relative;
-      width: min(560px, 85vw, 55vh);
-      height: min(560px, 85vw, 55vh);
+      width: min(560px, 85vw);
+      height: min(560px, 85vw);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .globe-canvas-wrap canvas {
       display: block;
-      width: 100% !important;
-      height: 100% !important;
+      max-width: 100%;
+      max-height: 100%;
     }
 
 
