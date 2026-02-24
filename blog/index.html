@@ -1,0 +1,29 @@
+---
+layout: default
+title: Blog
+description: "Thoughts on AI, engineering, and developer tools — by Evan Mattson."
+---
+
+<section class="section" style="padding-top: calc(var(--nav-h) + 4rem);">
+  <h2 class="section-label">
+    <span class="num">&bull;</span>
+    <span class="slash">//</span>
+    Blog
+  </h2>
+  {% if site.posts.size > 0 %}
+    <div class="blog-list">
+      {% for post in site.posts %}
+        <a href="{{ post.url }}" class="blog-card">
+          <p class="blog-card-date">{{ post.date | date: "%B %d, %Y" }}</p>
+          <h3 class="blog-card-title">{{ post.title }}</h3>
+          {% if post.description %}
+            <p class="blog-card-excerpt">{{ post.description }}</p>
+          {% endif %}
+          <span class="blog-card-link">Read more &rarr;</span>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="about-text">No posts yet. Check back soon!</p>
+  {% endif %}
+</section>
