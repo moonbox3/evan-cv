@@ -1360,6 +1360,7 @@
 
         requestAnimationFrame(function() {
         var size = Math.min(560, window.innerWidth * 0.8, window.innerHeight * 0.55);
+        canvas.parentElement.style.width = size + 'px';
 
         import('https://cdn.jsdelivr.net/npm/cobe@0.6.3/+esm').then(function(mod) {
           var createGlobe = mod.default;
