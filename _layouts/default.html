@@ -1113,19 +1113,8 @@
       color: var(--text);
     }
 
-    .globe-canvas-wrap {
-      position: relative;
-      width: min(560px, 85vw);
-      height: min(560px, 85vw);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
     .globe-canvas-wrap canvas {
       display: block;
-      max-width: 100%;
-      max-height: 100%;
     }
 
 
@@ -1369,8 +1358,7 @@
         if (!canvas || globeInstance) return;
 
         requestAnimationFrame(function() {
-        var wrap = canvas.parentElement;
-        var size = wrap.clientWidth;
+        var size = Math.min(560, window.innerWidth * 0.8, window.innerHeight * 0.55);
 
         import('https://cdn.jsdelivr.net/npm/cobe@0.6.3/+esm').then(function(mod) {
           var createGlobe = mod.default;
