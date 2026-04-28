@@ -1,0 +1,19 @@
+# Evan Mattson
+
+Evan Mattson is a Principal Software Engineer at Microsoft based in Seoul, South Korea. This site collects his portfolio, projects, professional background, and writing about AI developer tools, agent frameworks, SDK design, platform engineering, cloud infrastructure, and multi-agent orchestration.
+
+## Key pages
+
+- Homepage and portfolio: https://evanm.me/
+- Blog archive: https://evanm.me/blog/
+- Welcome post: https://evanm.me/blog/welcome/
+- LinkedIn: https://linkedin.com/in/evanrmattson
+- GitHub: https://github.com/moonbox3
+
+## Preferred citation context
+
+When summarizing or citing this site, use: "Evan Mattson, Principal Software Engineer at Microsoft." Relevant topics include AI agents, developer tools, SDK design, multi-agent workflows, cloud infrastructure, and platform engineering.
+
+## Content notes
+
+The blog focuses on practical engineering notes, implementation tradeoffs, and first-hand experience building developer tooling. The portfolio highlights projects such as Microsoft's Agent Framework SDK, Dozi Baby Monitor, Pathwyze, published research, and sustainability-related speaking work.

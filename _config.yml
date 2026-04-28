@@ -1,6 +1,25 @@
 title: Evan Mattson
 description: >-
-  Evan Mattson — Principal Software Engineer at Microsoft,
-  building the future of AI developer tools. Seoul, South Korea.
+  Evan Mattson is a Principal Software Engineer at Microsoft in Seoul,
+  building AI developer tools, agent frameworks, and multi-agent orchestration systems.
 url: "https://evanm.me"
 permalink: /blog/:title/
+exclude:
+  - .DS_Store
+  - tests
+  - seo-audits
+author:
+  name: Evan Mattson
+  job_title: Principal Software Engineer
+  employer: Microsoft
+  location: Seoul, South Korea
+  email: evanrmattson@gmail.com
+  linkedin: https://linkedin.com/in/evanrmattson
+  github: https://github.com/moonbox3
+  knows_about:
+    - AI agents
+    - Developer tools
+    - SDK design
+    - Multi-agent orchestration
+    - Cloud infrastructure
+    - Platform engineering

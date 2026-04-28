@@ -2,12 +2,52 @@
 layout: default
 ---
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ page.title | jsonify }},
+  "description": {{ page.description | default: site.description | jsonify }},
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "dateModified": "{{ page.last_modified_at | default: page.date | date_to_xmlschema }}",
+  "image": "{{ '/og-image.png' | absolute_url }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ page.url | absolute_url }}"
+  },
+  "author": {
+    "@type": "Person",
+    "@id": "{{ site.url }}/#person",
+    "name": "{{ site.author.name }}"
+  },
+  "publisher": {
+    "@type": "Person",
+    "@id": "{{ site.url }}/#person",
+    "name": "{{ site.author.name }}"
+  }
+}
+</script>
+
 <article>
   <header class="post-header">
     <a href="/blog" class="post-back">&larr; Back to blog</a>
     <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-meta">{{ page.date | date: "%B %d, %Y" }}</p>
+    <p class="post-meta">By {{ site.author.name }} &middot; {{ page.date | date: "%B %d, %Y" }}</p>
   </header>
+  <aside class="author-bio" aria-label="Author">
+    <div class="author-bio-inner">
+      <p class="author-bio-label">Author</p>
+      <p class="author-bio-text">
+        {{ site.author.name }} is a {{ site.author.job_title }} at {{ site.author.employer }}
+        focused on AI agents, developer tools, SDK design, and platform engineering.
+      </p>
+      <div class="author-bio-links">
+        <a href="{{ site.author.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="{{ site.author.github }}" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="/#contact">Contact</a>
+      </div>
+    </div>
+  </aside>
   <div class="post-content">
     {{ content }}
   </div>

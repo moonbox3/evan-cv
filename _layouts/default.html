@@ -1,15 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  {% assign page_title = page.title | default: "Principal Software Engineer" %}
+  {% if page.title %}
+    {% capture full_title %}{{ page.title }} — {{ site.title }}{% endcapture %}
+  {% else %}
+    {% capture full_title %}{{ site.title }} — Principal Software Engineer{% endcapture %}
+  {% endif %}
+  {% assign page_description = page.description | default: site.description %}
+  {% assign canonical_url = page.url | replace: 'index.html', '' | absolute_url %}
+  {% assign og_image = '/og-image.png' | absolute_url %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% if page.title %}{{ page.title }} — {{ site.title }}{% else %}{{ site.title }} — Principal Software Engineer{% endif %}</title>
-  <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+  <title>{{ full_title | strip }}</title>
+  <meta name="description" content="{{ page_description | strip | escape }}">
   <meta name="theme-color" content="#07070b">
-  <meta property="og:title" content="{% if page.title %}{{ page.title }} — {{ site.title }}{% else %}{{ site.title }} — Principal Software Engineer{% endif %}">
-  <meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}Building the future of AI developer tools at Microsoft. Seoul, South Korea.{% endif %}">
-  <meta property="og:image" content="https://evanm.me/og-image.png">
-  <meta property="og:type" content="website">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta property="og:title" content="{{ full_title | strip | escape }}">
+  <meta property="og:description" content="{{ page_description | strip | escape }}">
+  <meta property="og:image" content="{{ og_image }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:site_name" content="{{ site.title | escape }}">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ full_title | strip | escape }}">
+  <meta name="twitter:description" content="{{ page_description | strip | escape }}">
+  <meta name="twitter:image" content="{{ og_image }}">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "{{ site.url }}/#person",
+    "name": "{{ site.author.name }}",
+    "jobTitle": "{{ site.author.job_title }}",
+    "url": "{{ site.url }}",
+    "email": "mailto:{{ site.author.email }}",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "{{ site.author.employer }}",
+      "url": "https://www.microsoft.com/"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Seoul",
+      "addressCountry": "KR"
+    },
+    "sameAs": [
+      "{{ site.author.linkedin }}",
+      "{{ site.author.github }}"
+    ],
+    "knowsAbout": {{ site.author.knows_about | jsonify }}
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "{{ site.url }}/#website",
+    "name": "{{ site.title }}",
+    "url": "{{ site.url }}",
+    "description": {{ site.description | strip | jsonify }},
+    "publisher": {
+      "@id": "{{ site.url }}/#person"
+    }
+  }
+  </script>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23c9a84c'/%3E%3Ctext x='16' y='21.5' font-size='16' font-weight='700' font-family='ui-monospace,monospace' fill='%23080810' text-anchor='middle'%3EEM%3C/text%3E%3C/svg%3E">
   <style>
     /* =========================================
@@ -701,6 +759,52 @@
       color: var(--text-muted);
     }
 
+    .author-bio {
+      max-width: var(--content-w);
+      margin: 0 auto;
+      padding: 1.5rem 2rem 0;
+    }
+
+    .author-bio-inner {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      padding: 1rem 1.125rem;
+    }
+
+    .author-bio-label {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.35rem;
+    }
+
+    .author-bio-text {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.65;
+      margin-bottom: 0.6rem;
+    }
+
+    .author-bio-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .author-bio-links a {
+      color: var(--accent);
+      transition: opacity 0.3s ease;
+    }
+
+    .author-bio-links a:hover {
+      opacity: 0.7;
+    }
+
     .post-content {
       max-width: var(--content-w);
       margin: 0 auto;
@@ -1024,6 +1128,11 @@
       }
 
       .post-content {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+      }
+
+      .author-bio {
         padding-left: 1.25rem;
         padding-right: 1.25rem;
       }
