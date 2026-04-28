@@ -38,6 +38,7 @@ def main() -> int:
 
     default = read("_layouts/default.html")
     post = read("_layouts/post.html")
+    index = read("index.html")
     blog_index = read("blog/index.html")
     welcome = read("_posts/2026-02-24-welcome.md")
 
@@ -57,6 +58,28 @@ def main() -> int:
     assert_true(word_count(welcome) >= 600, "welcome post must have at least 600 words", failures)
     assert_true("/#projects" in welcome, "welcome post must link to the Projects section", failures)
     assert_true("/#contact" in welcome, "welcome post must link to the Contact section", failures)
+    assert_true(
+        "shipping it to General availability" in index,
+        "Agent Framework SDK card must mention General availability",
+        failures,
+    )
+    assert_true("TrueFast" in index, "project list must include TrueFast", failures)
+    assert_true("https://gettruefast.com" in index, "TrueFast card must link to the website", failures)
+    assert_true(
+        "https://apps.apple.com/us/app/truefast/id6762436547" in index,
+        "TrueFast card must link directly to the App Store",
+        failures,
+    )
+    assert_true(
+        "canvas.style.width = size + 'px'" in default and "canvas.style.height = size + 'px'" in default,
+        "globe canvas must set explicit CSS dimensions for Safari",
+        failures,
+    )
+    assert_true(
+        "var renderSize = Math.floor(size * dpr)" in default and "width: renderSize" in default and "height: renderSize" in default,
+        "globe canvas must render at device-pixel backing size",
+        failures,
+    )
 
     if failures:
         for failure in failures:
