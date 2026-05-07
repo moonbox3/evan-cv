@@ -12,6 +12,15 @@
   {% assign og_image = '/og-image.png' | absolute_url %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WKHDCXW2WD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-WKHDCXW2WD');
+  </script>
   <title>{{ full_title | strip }}</title>
   <meta name="description" content="{{ page_description | strip | escape }}">
   <meta name="theme-color" content="#07070b">
